@@ -1,0 +1,27 @@
+$width: 35vw;
+$obstacleSide: $width/10;
+
+.game-step {
+    width: $width;
+    height: 100%;
+    position: relative;
+}
+
+.game-obstacle {
+    position: absolute;
+    right: 0;
+    width: $obstacleSide;
+    display: flex;
+
+    .obstacle-spikes {
+        width: 50%;
+        height: 100%;
+        background: url('./triangle.svg') repeat;
+        background-size: 100%;
+        background-position-x: -50%;
+    }
+    .obstacle-block {
+        width: 80%;
+        background-color: white;
+    }
+}

@@ -1,0 +1,40 @@
+.game-frame-container {
+    width: 100vw;
+    height: 100vh;
+    padding: 10vh 10vw 25vh;
+}
+
+.floor {
+    position: relative;
+    height: 100%;
+    border-bottom: white 5px solid;
+}
+
+.game-mover {
+    position: absolute;
+    height: 100%;
+    // background: linear-gradient(to right, red, blue);
+    display: flex;
+    justify-content: flex-start;
+}
+
+$ballSize: 7vw;
+
+.ball {
+    position: absolute;
+    left: 25vw;
+    width: $ballSize;
+    height: $ballSize;
+    background: url('../../assets/SVG/Mereo-M.svg'), linear-gradient(black, black);
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 100px;
+}
+
+.score {
+    position: fixed;
+    top: 10vh;
+    text-align: center;
+    transition: transform 0.5s ease-in-out 0.2s;
+}

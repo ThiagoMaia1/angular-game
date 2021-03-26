@@ -1,0 +1,49 @@
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.5s ease-in-out;
+
+    .logo-container {
+        width: 100%;
+        height: 100%;
+        padding: 3vh 10vh;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        .letter-container {
+            border-radius: 200px;
+            height: 100%;
+            flex: 1 1 100%;
+            transition: transform 0.5s ease-in-out, outline-width 0.5s ease-in-out, outline-offset 0.5s ease-in-out;
+            display: flex;
+            justify-content: center;
+            &.logo-ball {
+                border: white 1vh solid;
+                background-color: black;
+                height: 350%;
+                padding: 15vh 2vh;
+            }
+        }
+
+        img {
+            object-fit: contain;
+            height: 100%;
+        }
+    }
+    
+}
+
+.color-reverser {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: white;
+    mix-blend-mode: exclusion;
+    transition: transform 0.5s ease-in-out;
+
+    &:not(.active) {
+        transform: translateX(100%);
+    }
+}

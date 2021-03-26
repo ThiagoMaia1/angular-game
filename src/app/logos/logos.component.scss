@@ -1,0 +1,22 @@
+.logos-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    position: relative;
+
+    > div {
+        width: 100%;
+        flex: auto;
+        min-height: 0;
+    }
+}
+
+.game-message {
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    bottom: 20%;
+}

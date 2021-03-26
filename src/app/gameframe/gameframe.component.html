@@ -1,0 +1,18 @@
+<div class='game-frame-container'>
+    <div class='score' [ngStyle]="{transform: dead ? 'translate(16vw, 20vh) scale(1.5)' : ''}">
+        Pontuação: {{(score/10).toFixed(0)}}
+        <div *ngIf='dead'>Pressione "Espaço" para jogar novamente</div>
+    </div>
+    <div class='floor' [style.transform]="'rotate(' + (fps - initialFps)*-25 + 'deg)'">
+        <div class='ball' [ngStyle]="{
+            bottom: ballHeight + '%', 
+            transform: 'rotate(' + ballRotation + 'deg)',
+            border: '2px solid ' + ballColor
+        }"></div>
+        <div class='game-mover' [ngStyle]="{left: moverLeft + 'vw'}">
+            <div *ngFor='let o of gameObstacles; let i = index'>
+                <app-game-step [height]='o.height' [y]='o.y'></app-game-step>
+            </div>
+        </div>
+    </div>
+</div>

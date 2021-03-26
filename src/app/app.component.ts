@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'mereo';
+  gameIsActive = false;
+
+  resetGame = () => {
+    this.gameIsActive = false;
+    setTimeout(() => this.gameIsActive= true, 0);
+  }
 }
