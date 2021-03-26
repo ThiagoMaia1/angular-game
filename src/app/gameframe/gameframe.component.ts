@@ -65,6 +65,10 @@ export class GameframeComponent implements OnInit {
     if (e.code === 'Space') this.jump(this.jumpHeight);
   };
 
+  clickListener = (e : MouseEvent) => {
+    this.jump(this.jumpHeight);
+  }
+
   jump = (height: number) => {
     clearInterval(this.intervalBounce);
     this.jumpSteps = 5;
@@ -108,16 +112,19 @@ export class GameframeComponent implements OnInit {
     this.ballColor = 'red';
     clearTimeout(this.onFrameInterval);
     document.removeEventListener('keyup', this.shortCutListener);
+    document.removeEventListener('click', this.clickListener);
     document.addEventListener('keyup', this.reopenGame);
+    document.addEventListener('click', this.reopenClick);
   };
 
-  reopenGame = () => {
-    this.gameActiveEvent.emit();
+  reopenGame = (e : KeyboardEvent) => {
+    if (e.code === 'Space') this.gameActiveEvent.emit();
   }
+
+  reopenClick = () =>this.gameActiveEvent.emit();
 
   rotateScreen = () => {
     this.fps -= Math.sqrt(this.score)/10000;
-
   }
 
   onFrame = () => {
@@ -138,5 +145,6 @@ export class GameframeComponent implements OnInit {
   ngOnInit(): void {
     this.onFrameInterval = setInterval(this.onFrame, this.miliPerFrame);
     document.addEventListener('keyup', this.shortCutListener);
+    document.addEventListener('click', this.clickListener);
   }
 }

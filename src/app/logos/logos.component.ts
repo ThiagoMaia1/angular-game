@@ -20,6 +20,7 @@ export class LogosComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    const activateGame = () => this.gameActiveEvent.emit(true);
     const showLogo = (index = 0) => {
       this.logosVisibility[index] = true;
       if (index < this.numberOfLogos - 1) {
@@ -32,9 +33,9 @@ export class LogosComponent implements OnInit {
         setTimeout(() => {
           this.gamePreparation = true;
           document.addEventListener('keyup', e => {
-            if (e.code === 'Space')
-              this.gameActiveEvent.emit(true);
+            if (e.code === 'Space') activateGame();
           })
+          document.addEventListener('click', activateGame)
         }, 3500);
       }
     }

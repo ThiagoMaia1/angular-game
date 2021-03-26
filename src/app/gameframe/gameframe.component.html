@@ -1,7 +1,8 @@
 <div class='game-frame-container'>
-    <div class='score' [ngStyle]="{transform: dead ? 'translate(16vw, 20vh) scale(1.5)' : ''}">
+    <div class='score' [ngStyle]="{transform: dead ? 'translate(22vw, 20vh) scale(1.5)' : ''}">
         Pontuação: {{(score/10).toFixed(0)}}
-        <div *ngIf='dead'>Pressione "Espaço" para jogar novamente</div>
+        <div *ngIf='dead'>Pressione "Espaço" ou clique</div>
+        <div *ngIf='dead'> para jogar novamente</div>
     </div>
     <div class='floor' [style.transform]="'rotate(' + (fps - initialFps)*-25 + 'deg)'">
         <div class='ball' [ngStyle]="{
