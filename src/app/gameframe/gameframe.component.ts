@@ -34,29 +34,28 @@ export class GameframeComponent implements OnInit {
   @Output() gameActiveEvent = new EventEmitter<boolean>();
   initialFps = 60;
   fps = this.initialFps;
-  miliPerFrame = 1000/this.fps;
   stepWidth = 35;
   ballDiameter = 7;
   heightVW = (window.innerHeight*0.65)/window.innerWidth;
   diameterInPercentageHeight = this.ballDiameter/this.heightVW;
   moverLeft = 0;
   ballHeight = 0;
-  ballFallingSpeed = 2;
-  jumpHeight = 50;
-  currentJumpHeight = 75;
-  jumpSteps = 0;
+  ballFallingSpeed = 0;
   ballRotation = 0;
   ballRotatingSpeed = 7;
-  intervalBounce : NodeJS.Timeout = setTimeout(() => void 0, 0);
-  onFrameInterval : NodeJS.Timeout = setTimeout(() => void 0, 0);
   score = 0;
   ballColor = 'white';
-  floorHeight = 0;
+  baseFloorHeight = 0;
+  baseCeilingHeight = 100;
   dead = false;
   ballOffset = 25;
   wholeBlockWidth = this.stepWidth/10;
   spikeWidth = this.wholeBlockWidth/5;
   blockWidth = this.wholeBlockWidth - this.spikeWidth;
+  nStep = 0;
+  gravityAcceleration = -0.2;
+  elasticity = 1;
+  jumpPower = 5;
   running = true;
 
   gameObstacles = Array(4).fill(null).map(_ => new GameObstacle());
@@ -66,67 +65,66 @@ export class GameframeComponent implements OnInit {
       let obstacles = this.gameObstacles.slice(1);
       obstacles.push(new GameObstacle());
       this.gameObstacles = [...obstacles];
-      // this.gameObstacles.shift();
-      // this.gameObstacles.push(new GameObstacle());
       this.moverLeft = 0;
     }
-    this.moverLeft -= (this.stepWidth/this.fps);
+    this.moverLeft -= this.stepWidth/this.initialFps;
   }
 
   ballFalling = () => {
-    if (this.jumpSteps > 1) {
-      this.ballHeight += this.currentJumpHeight/(this.jumpSteps + 1);
-      this.jumpSteps--;
-    }
-    if (this.ballHeight > 100) setTimeout(() => this.jump(-10), 0);
-    if (this.ballHeight > this.floorHeight) {
-      this.ballHeight = Math.min(Math.max(this.floorHeight, this.ballHeight - this.ballFallingSpeed), 100);
-      this.rotate(this.currentJumpHeight/10);
-    }
+    let floor = this.getFloorHeight();
+    let ceiling = this.getCeilingHeight();
+    this.setFallingSpeed(this.gravityAcceleration);
+    this.ballHeight = Math.min(Math.max(floor, this.ballHeight + this.ballFallingSpeed), ceiling);
+    if (this.ballHeight === floor) this.bounce(1.3*this.elasticity);
+    if (this.ballHeight === ceiling) this.bounce(1*this.elasticity);
+      // this.rotate(this.currentJumpHeight/10);
   }
+
+  setFallingSpeed = (acceleration : number) => this.ballFallingSpeed += acceleration;
 
   shortCutListener = (e : KeyboardEvent) => {
     if (e.code === 'Space') this.jump();
     if (e.code === 'KeyP') this.pause();
   };
 
-  clickListener = (e : MouseEvent) => {
-    this.jump(this.jumpHeight);
+  clickListener = () => {
+    this.jump();
   }
 
-  jump = (height: number) => {
-    clearInterval(this.intervalBounce);
-    this.jumpSteps = 5;
-    this.currentJumpHeight = height;
-    this.intervalBounce = setInterval(() => {
-      if (this.ballHeight < 1) {
-        clearInterval(this.intervalBounce);
-        this.bounce(height);
-      }
-    }, 50)
-  }
+  jump = () => {
+    if(this.running) 
+      this.setFallingSpeed(this.jumpPower);
+  };
 
-  bounce = (jumpHeight : number) => {
-    if (jumpHeight > 1) {
-      let bounceJump = jumpHeight/2;
-      this.jump(bounceJump);
-    } else {
-      this.ballHeight = this.floorHeight;
-    }
-  } 
+  bounce = (strength : number) => this.setFallingSpeed(-this.ballFallingSpeed*strength);
 
   rotate = (angle : number) => this.ballRotation += angle;
 
+  isOverBlock = () : boolean => {
+    let x = this.moverLeft - this.ballDiameter - this.ballOffset + this.stepWidth*(this.nStep + 1);
+    return x < this.wholeBlockWidth && x > 0;
+  }
+
+  getFloorCeilingHeight = (baseValue : number, getFromObstacle : (obstacle : GameObstacle) => number) => {
+    if (!this.isOverBlock() || !this.obstacleHasHeight()) return baseValue;
+    return getFromObstacle(this.gameObstacles[this.nStep]);
+  }
+
+  getFloorHeight = () => this.baseFloorHeight;//this.getFloorCeilingHeight(this.baseFloorHeight, (o : GameObstacle) => o.y + o.height);
+  getCeilingHeight = () => this.baseCeilingHeight;//this.getFloorCeilingHeight(this.baseCeilingHeight, (o : GameObstacle) => o.y > 0o.y);
+
+  obstacleHasHeight = () : boolean => this.gameObstacles[this.nStep].height > 0;
+
+  getAngle = () => (this.fps - this.initialFps)*25;
+  getLaps = () => Math.floor(this.getAngle()/360);
+
   checkDeath = () => {
-    let nStep = 0;
-    let o = this.gameObstacles[nStep];
-    let x = this.moverLeft - this.ballDiameter - this.ballOffset + this.stepWidth*(nStep + 1);
+    let o = this.gameObstacles[this.nStep];
     if (
-      o.height > 0 && 
+      this.obstacleHasHeight() && 
       this.ballHeight + this.diameterInPercentageHeight > o.y &&
       this.ballHeight < o.y + o.height &&
-      x < this.wholeBlockWidth &&
-      x > 0
+      this.isOverBlock()
     ) {
       this.die();
     }
@@ -141,6 +139,12 @@ export class GameframeComponent implements OnInit {
     document.addEventListener('keyup', this.reopenGame);
     document.addEventListener('click', this.reopenClick);
   };
+  
+  pause = () => {
+    console.log('pausar', this.running);
+    this.running = !this.running;
+    if (this.running) this.onFrame();
+  }
 
   reopenGame = (e : KeyboardEvent) => {
     if (e.code === 'Space') this.gameActiveEvent.emit();
@@ -148,17 +152,16 @@ export class GameframeComponent implements OnInit {
 
   reopenClick = () =>this.gameActiveEvent.emit();
 
-  rotateScreen = () => {
-    this.fps -= Math.sqrt(this.score)/10000;
-  }
+  speedUp = () => this.fps += Math.sqrt(this.score)/10000;
 
   onFrame = () => {
     this.checkDeath();    
     this.moveSteps();
     this.ballFalling();
-    this.rotate(this.ballRotatingSpeed);
-    this.rotateScreen();
+    this.rotate(this.ballRotatingSpeed + Math.abs(this.ballFallingSpeed));
+    this.speedUp();
     this.score++;
+    if(this.running) setTimeout(this.onFrame, 1000/this.fps);
   }
 
   constructor() {
@@ -168,8 +171,8 @@ export class GameframeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.onFrameInterval = setInterval(this.onFrame, this.miliPerFrame);
+    this.onFrame();
     document.addEventListener('keyup', this.shortCutListener);
-    document.addEventListener('click', this.clickListener);
+    // document.addEventListener('click', this.clickListener);
   }
 }
