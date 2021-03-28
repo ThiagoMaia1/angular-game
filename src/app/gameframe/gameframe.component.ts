@@ -1,15 +1,13 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import Score, { Categories, Category } from 'src/models/Score';
 import GameObstacle from '../../models/GameObstacle';
+
 @Component({
   selector: 'app-gameframe',
   template: `
     <div class='game-frame-container'>
-      <div class='score' [ngStyle]="{transform: dead ? 'translate(22vw, 20vh) scale(1.5)' : ''}">
-          <div>Pontuação: {{(score/10).toFixed(0)}}</div>
-          <div *ngIf='getLaps() > 0' style='margin: "2vh";'>Voltas: {{getLaps()}}</div>
-          <div *ngIf='dead'>Pressione "Espaço" ou clique</div>
-          <div *ngIf='dead'> para jogar novamente</div>
-      </div>
+      <app-ranking-menu *ngIf='dead' (setCategoryEvent)='setCategory($event)' [score]='getScoreObject()'></app-ranking-menu>
+      <app-score *ngIf='!dead' [score]='getScoreObject()'></app-score>
       <div (click)='pause()' class='pause-button' [ngStyle]='dead ? {visibility: "hidden"} : {}' name='Atalho: P'>
           {{(running ? 'P' : 'Desp') + 'ausar'}}
       </div>
@@ -32,6 +30,15 @@ import GameObstacle from '../../models/GameObstacle';
 export class GameframeComponent implements OnInit {
 
   @Output() gameActiveEvent = new EventEmitter<boolean>();
+  @Output() setCategoryEvent = new EventEmitter<Category>();
+
+  setCategory = (category : Category) => {
+    this.setCategoryEvent.emit(category);
+  }
+
+  @Input() category : Category = Categories[0];
+  
+  spinningIsActive : boolean;
   initialFps = 60;
   fps = this.initialFps;
   stepWidth = 35;
@@ -115,8 +122,10 @@ export class GameframeComponent implements OnInit {
 
   obstacleHasHeight = () : boolean => this.gameObstacles[this.nStep].height > 0;
 
-  getAngle = () => (this.fps - this.initialFps)*25;
+  getAngle = () => this.spinningIsActive ? (this.fps - this.initialFps)*25 : 0;
   getLaps = () => Math.floor(this.getAngle()/360);
+  getScore = () => Math.round(this.score/10);
+  getScoreObject = () => new Score('', this.category.name, this.getScore(), this.getLaps())
 
   checkDeath = () => {
     let o = this.gameObstacles[this.nStep];
@@ -150,7 +159,7 @@ export class GameframeComponent implements OnInit {
     if (e.code === 'Space') this.gameActiveEvent.emit();
   }
 
-  reopenClick = () =>this.gameActiveEvent.emit();
+  reopenClick = () => this.gameActiveEvent.emit();
 
   speedUp = () => this.fps += Math.sqrt(this.score)/10000;
 
@@ -168,11 +177,12 @@ export class GameframeComponent implements OnInit {
     this.gameObstacles.forEach((o, i) => {
       if(i < 2) o.clear();
     });
+    this.spinningIsActive = this.category.name === 'spinning';
   }
 
   ngOnInit(): void {
     this.onFrame();
     document.addEventListener('keyup', this.shortCutListener);
-    // document.addEventListener('click', this.clickListener);
+    document.addEventListener('click', this.clickListener);
   }
 }

@@ -1,0 +1,16 @@
+@import '../../../../styles.scss';
+
+.input-nickname-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 3vh 0;
+    > * {
+      margin: 3vh 0;
+    }
+    > input {
+        text-align: center;
+        line-height: 100%;
+        @include gray-highlight;
+    }
+  }

@@ -1,15 +1,26 @@
 import { Component } from '@angular/core';
+import { Categories } from 'src/models/Score';
+// import { firestore } from '../firebase/Firebase';
 
 @Component({
   selector: 'app-root',
   template: `
-    <app-logos *ngIf='!gameIsActive' (gameActiveEvent)='gameIsActive = $event'></app-logos>
-    <app-gameframe *ngIf='gameIsActive' (gameActiveEvent)='resetGame()'></app-gameframe>
+    <app-logos 
+      *ngIf='!gameIsActive' 
+      (gameActiveEvent)='gameIsActive = $event'
+    ></app-logos>
+    <app-gameframe 
+      *ngIf='gameIsActive' 
+      [category]='this.category'>
+      (gameActiveEvent)='resetGame()' 
+      (setCategoryEvent)='category = $event'  
+    </app-gameframe>
   `,
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  gameIsActive = false;
+  gameIsActive = true;
+  category = Categories[0];
 
   resetGame = () => {
     this.gameIsActive = false;

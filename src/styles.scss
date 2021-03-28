@@ -9,3 +9,29 @@ body {
     font-family: 'Press Start 2P', cursive;
     margin: 0;
 }
+
+@mixin button-div {
+    cursor: url('./assets/PixelatedPointer.png'), auto;
+    user-select: none;
+}
+
+.button-div {
+    @include button-div;
+}
+
+input, button, textarea {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+}
+
+@mixin gray-highlight {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 3vh;
+}
+
+.gray-highlight {
+    @include gray-highlight;
+}

@@ -1,0 +1,24 @@
+@import '../../../styles.scss';
+
+.category-selector {
+    display: flex;
+    justify-content: space-between;
+    z-index: 100;
+    margin: 2vh;
+    > div {
+        @include button-div;
+    }
+    .category-tab {
+        padding: 3vh;
+    }
+}
+
+.list-container {
+    width: 70vw;
+}
+
+.ranking-line {
+    display: flex;
+    justify-content: space-between;
+    margin: 1vh 0;
+}
