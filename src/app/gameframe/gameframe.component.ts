@@ -57,6 +57,7 @@ export class GameframeComponent implements OnInit {
   wholeBlockWidth = this.stepWidth/10;
   spikeWidth = this.wholeBlockWidth/5;
   blockWidth = this.wholeBlockWidth - this.spikeWidth;
+  running = true;
 
   gameObstacles = Array(4).fill(null).map(_ => new GameObstacle());
   
@@ -85,7 +86,8 @@ export class GameframeComponent implements OnInit {
   }
 
   shortCutListener = (e : KeyboardEvent) => {
-    if (e.code === 'Space') this.jump(this.jumpHeight);
+    if (e.code === 'Space') this.jump();
+    if (e.code === 'KeyP') this.pause();
   };
 
   clickListener = (e : MouseEvent) => {
@@ -133,7 +135,7 @@ export class GameframeComponent implements OnInit {
   die = () => {
     this.dead = true;
     this.ballColor = 'red';
-    clearTimeout(this.onFrameInterval);
+    this.running = false;
     document.removeEventListener('keyup', this.shortCutListener);
     document.removeEventListener('click', this.clickListener);
     document.addEventListener('keyup', this.reopenGame);

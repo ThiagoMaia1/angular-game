@@ -38,3 +38,11 @@ $ballSize: 7vw;
     text-align: center;
     transition: transform 0.5s ease-in-out 0.2s;
 }
+
+.pause-button {
+    position: absolute;
+    right: 10vw;
+    z-index: 100;
+    cursor: pointer;
+    user-select: none;
+}
