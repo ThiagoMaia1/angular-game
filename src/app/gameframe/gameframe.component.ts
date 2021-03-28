@@ -1,9 +1,32 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import GameObstacle from '../../models/GameObstacle';
-
 @Component({
   selector: 'app-gameframe',
-  templateUrl: './gameframe.component.html',
+  template: `
+    <div class='game-frame-container'>
+      <div class='score' [ngStyle]="{transform: dead ? 'translate(22vw, 20vh) scale(1.5)' : ''}">
+          <div>Pontuação: {{(score/10).toFixed(0)}}</div>
+          <div *ngIf='getLaps() > 0' style='margin: "2vh";'>Voltas: {{getLaps()}}</div>
+          <div *ngIf='dead'>Pressione "Espaço" ou clique</div>
+          <div *ngIf='dead'> para jogar novamente</div>
+      </div>
+      <div (click)='pause()' class='pause-button' [ngStyle]='dead ? {visibility: "hidden"} : {}' name='Atalho: P'>
+          {{(running ? 'P' : 'Desp') + 'ausar'}}
+      </div>
+      <div class='floor' [style.transform]="'rotate(' + getAngle() + 'deg)'">
+          <div class='ball' [ngStyle]="{
+              bottom: ballHeight + '%', 
+              transform: 'rotate(' + ballRotation + 'deg)',
+              border: '2px solid ' + ballColor
+          }"></div>
+          <div class='game-mover' [ngStyle]="{left: moverLeft + 'vw'}">
+              <div *ngFor='let o of gameObstacles; let i = index'>
+                  <app-game-step [height]='o.height' [y]='o.y'></app-game-step>
+              </div>
+          </div>
+      </div>
+    </div>
+  `,
   styleUrls: ['./gameframe.component.scss']
 })
 export class GameframeComponent implements OnInit {

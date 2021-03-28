@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  template: `
+    <app-logos *ngIf='!gameIsActive' (gameActiveEvent)='gameIsActive = $event'></app-logos>
+    <app-gameframe *ngIf='gameIsActive' (gameActiveEvent)='resetGame()'></app-gameframe>
+  `,
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {

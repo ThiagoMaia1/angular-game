@@ -2,7 +2,20 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-logos',
-  templateUrl: './logos.component.html',
+  template: `
+    <div class='logos-container'>
+      <div *ngFor='let l of logosVisibility; let i = index'>
+          <app-logo [ngStyle]="!l || (i > 0 && ballIsActive) ? {'visibility': 'hidden'} : {}" [isInversed]='(i % 2) !== inversedIndex'
+                    [yTranslation]="linesTogether ? (-i + (numberOfLogos - 1)/2) : 0"
+                    [columnsTogether]="columnsTogether"
+                    [ballIsActive]='ballIsActive'
+                    [gamePreparation]='gamePreparation'
+          >
+          </app-logo>
+      </div>
+      <div *ngIf='gameMessage' class='game-message'>Pressione "Espaço" ou clique para jogar</div>
+    </div>
+`,
   styleUrls: ['./logos.component.scss']
 })
 export class LogosComponent implements OnInit {
