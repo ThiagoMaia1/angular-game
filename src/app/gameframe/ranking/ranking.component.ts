@@ -5,7 +5,7 @@ import Score, { Categories, Category } from 'src/models/Score';
 @Component({
   selector: 'app-ranking',
   template: `
-    <div>
+    <div style='overflow: hidden'>
       <div class='category-selector'>
         <div *ngFor='let c of categories;' 
              (click)='category = c' 
@@ -14,10 +14,17 @@ import Score, { Categories, Category } from 'src/models/Score';
         </div>
       </div>
       <div class='list-container'>
+        <div class='ranking-line'>
+          <div style='width: 15vw'>Nome</div>
+          <div>Pontos</div>
+          <div>Voltas</div>
+          <div style='width: 20vw; text-align: center;'>Data</div>
+        </div>
         <div *ngFor='let s of getFilteredScores(); let i = index' class='ranking-line' 
           [ngStyle]='i % 2 === 1 ? {backgroundColor: "rgba(255, 255, 255, 0.2)"} : {}'>
-          <div style='width: 15vw;'>{{s.nickname}}</div>
+          <div style='width: 15vw'>{{s.nickname}}</div>
           <div>{{s.points}}</div>
+          <div>{{s.laps}}</div>
           <div>{{s.strDate}}</div>
         </div>
       </div>
@@ -40,7 +47,6 @@ export class RankingComponent implements OnInit {
       FirebaseCollections.scores
     ).then(scores => {
       this.scores = scores.sort((a, b) => b.points - a.points);
-      console.log(scores);
     });
   }
 }

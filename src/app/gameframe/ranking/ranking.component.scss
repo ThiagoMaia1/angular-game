@@ -4,7 +4,7 @@
     display: flex;
     justify-content: space-between;
     z-index: 100;
-    margin: 2vh;
+    margin: 3vh;
     > div {
         @include button-div;
     }
@@ -15,6 +15,7 @@
 
 .list-container {
     width: 70vw;
+    height: 60vh;
 }
 
 .ranking-line {

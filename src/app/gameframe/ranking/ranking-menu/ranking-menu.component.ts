@@ -12,9 +12,14 @@ import Score, { Categories, Category } from 'src/models/Score';
       >
       </app-ranking-input>
       <app-ranking *ngIf='rankingIsVisible'></app-ranking>
-      <div>Pressione "Espaço" ou clique para jogar novamente</div>
-      <div>
-        <div (click)='setCategoryStill()' class='button-div'>Muito difícil? Jogar sem girar.</div>
+      <div (click)='reopen()' class='button-div'>Pressione "Espaço" ou clique para jogar novamente</div>
+      <div (click)='setCategory()' class='button-div'>
+        <div>
+          {{score.category === 'spinning' 
+            ? 'Muito difícil? Jogar sem girar.' 
+            : 'Muito fácil? Coloque a tela para rodar.'
+          }}
+        </div>
       </div>
     </div>
   `,
@@ -33,6 +38,9 @@ import Score, { Categories, Category } from 'src/models/Score';
       background-color: rgba(0,0,0,.75);
       padding: 0 5vw;
     }
+    .button-div {
+      padding: 3vh;
+    }
   `]
 })
 
@@ -41,7 +49,13 @@ export class RankingMenuComponent implements OnInit {
   @Input() score !: Score;
   @Output() setCategoryEvent = new EventEmitter<Category>();
 
-  setCategoryStill = () => this.setCategoryEvent.emit(Categories[0]);
+  setCategory = () => {
+    let i = 0;
+    if (this.score.category === 'spinning') i = 1;
+    if (this.score.category === 'still') i = 0;
+    this.setCategoryEvent.emit(Categories[i]);
+  }
+  reopen = () => this.setCategoryEvent.emit(Categories.filter(c => c.name === this.score.category)[0]);
 
   rankingIsVisible = false;
   

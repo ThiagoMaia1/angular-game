@@ -18,6 +18,7 @@ export class RankingInputComponent implements OnInit {
   @Output() showRankingEvent = new EventEmitter();
 
   keyup = (e : KeyboardEvent) => {
+    e.stopPropagation();
     if (e.code !== 'Enter') return;
     let el = e.target as HTMLInputElement; 
     if(el.value) {

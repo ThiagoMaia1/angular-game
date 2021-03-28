@@ -11,9 +11,10 @@ import { Categories } from 'src/models/Score';
     ></app-logos>
     <app-gameframe 
       *ngIf='gameIsActive' 
-      [category]='this.category'>
+      [category]='category'
       (gameActiveEvent)='resetGame()' 
       (setCategoryEvent)='category = $event'  
+      >
     </app-gameframe>
   `,
   styleUrls: ['./app.component.scss']
@@ -23,6 +24,7 @@ export class AppComponent {
   category = Categories[0];
 
   resetGame = () => {
+    console.log(this.category);
     this.gameIsActive = false;
     setTimeout(() => this.gameIsActive= true, 0);
   }

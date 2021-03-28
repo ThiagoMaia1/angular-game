@@ -34,11 +34,12 @@ export class GameframeComponent implements OnInit {
 
   setCategory = (category : Category) => {
     this.setCategoryEvent.emit(category);
+    this.gameActiveEvent.emit();
   }
 
-  @Input() category : Category = Categories[0];
+  @Input() category !: Category;
   
-  spinningIsActive : boolean;
+  spinningIsActive !: boolean;
   initialFps = 60;
   fps = this.initialFps;
   stepWidth = 35;
@@ -84,7 +85,6 @@ export class GameframeComponent implements OnInit {
     this.ballHeight = Math.min(Math.max(floor, this.ballHeight + this.ballFallingSpeed), ceiling);
     if (this.ballHeight === floor) this.bounce(1.3*this.elasticity);
     if (this.ballHeight === ceiling) this.bounce(1*this.elasticity);
-      // this.rotate(this.currentJumpHeight/10);
   }
 
   setFallingSpeed = (acceleration : number) => this.ballFallingSpeed += acceleration;
@@ -122,7 +122,9 @@ export class GameframeComponent implements OnInit {
 
   obstacleHasHeight = () : boolean => this.gameObstacles[this.nStep].height > 0;
 
-  getAngle = () => this.spinningIsActive ? (this.fps - this.initialFps)*25 : 0;
+  getAngle = () => {
+    return this.spinningIsActive ? (this.fps - this.initialFps)*25 : 0;
+  }
   getLaps = () => Math.floor(this.getAngle()/360);
   getScore = () => Math.round(this.score/10);
   getScoreObject = () => new Score('', this.category.name, this.getScore(), this.getLaps())
@@ -146,7 +148,6 @@ export class GameframeComponent implements OnInit {
     document.removeEventListener('keyup', this.shortCutListener);
     document.removeEventListener('click', this.clickListener);
     document.addEventListener('keyup', this.reopenGame);
-    document.addEventListener('click', this.reopenClick);
   };
   
   pause = () => {
@@ -158,8 +159,6 @@ export class GameframeComponent implements OnInit {
   reopenGame = (e : KeyboardEvent) => {
     if (e.code === 'Space') this.gameActiveEvent.emit();
   }
-
-  reopenClick = () => this.gameActiveEvent.emit();
 
   speedUp = () => this.fps += Math.sqrt(this.score)/10000;
 
@@ -177,10 +176,10 @@ export class GameframeComponent implements OnInit {
     this.gameObstacles.forEach((o, i) => {
       if(i < 2) o.clear();
     });
-    this.spinningIsActive = this.category.name === 'spinning';
   }
 
   ngOnInit(): void {
+    this.spinningIsActive = this.category.name === 'spinning';
     this.onFrame();
     document.addEventListener('keyup', this.shortCutListener);
     document.addEventListener('click', this.clickListener);
