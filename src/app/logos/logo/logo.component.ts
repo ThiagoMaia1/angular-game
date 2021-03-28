@@ -23,10 +23,11 @@ export class LogoComponent implements OnInit {
   @Input() yTranslation : number = 0; 
   @Input() columnsTogether : boolean = false; 
   @Input() ballIsActive : boolean = false;
+  @Input() gamePreparation : boolean = false;
 
   word = 'MEREO';
   getTransformX = (index : number) => 
-    this.columnsTogether ? {transform: `translateX(${(-index + (this.word.length - 1)/2)*100}%)`} : {};
+    this.columnsTogether && !this.gamePreparation ? {transform: `translateX(${(-index + (this.word.length - 1)/2)*100}%)`} : {};
   ngOnInit(): void {
   }
 }

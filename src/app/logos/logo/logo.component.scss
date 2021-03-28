@@ -19,12 +19,6 @@
             transition: transform 0.5s ease-in-out, outline-width 0.5s ease-in-out, outline-offset 0.5s ease-in-out;
             display: flex;
             justify-content: center;
-            &.logo-ball {
-                border: white 1vh solid;
-                background-color: black;
-                height: 350%;
-                padding: 15vh 2vh;
-            }
         }
 
         img {
@@ -46,4 +40,25 @@
     &:not(.active) {
         transform: translateX(100%);
     }
+}
+
+.letter-m {
+    z-index: 100;
+    .absolute-ball {
+        border: white 1vh solid;
+        background-color: black;
+        height: 30vh;
+        width: 30vh;
+        position: absolute;
+        border-radius: 100px;
+        z-index: -1;
+        transform: scale(1.25) translateY(-6.5vh);
+    }
+    &.game-prep {
+        transform: translateX(116%) translateY(139%) scale(0.26);
+    }
+}
+
+.game-prep:not(.letter-m) {
+    visibility: hidden;
 }

@@ -26,6 +26,7 @@ export class LogosComponent implements OnInit {
   linesTogether = false;
   columnsTogether = false;
   ballIsActive = false;
+  gameMessage = false;
   gamePreparation = false;
 
   @Output() gameActiveEvent = new EventEmitter<boolean>();
@@ -33,7 +34,10 @@ export class LogosComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    const activateGame = () => this.gameActiveEvent.emit(true);
+    const activateGame = () => {
+      this.gamePreparation = true;
+      setTimeout(() => this.gameActiveEvent.emit(true), 500);
+    }
     const showLogo = (index = 0) => {
       this.logosVisibility[index] = true;
       if (index < this.numberOfLogos - 1) {
@@ -44,7 +48,7 @@ export class LogosComponent implements OnInit {
         setTimeout(() => this.ballIsActive = true, 2500);
         setTimeout(() => this.columnsTogether = true, 3000);
         setTimeout(() => {
-          this.gamePreparation = true;
+          this.gameMessage = true;
           document.addEventListener('keyup', e => {
             if (e.code === 'Space') activateGame();
           })
