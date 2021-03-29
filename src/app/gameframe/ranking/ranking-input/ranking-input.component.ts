@@ -7,7 +7,7 @@ import Score from 'src/models/Score';
   template: `
     <div class='input-nickname-container'>
       <div>Digite seu apelido para incluir sua pontuação no ranking:</div>
-      <input autofocus (keyup)='keyup($event)'/>
+      <input autofocus (keyup)='keyup($event)' maxlength='30'/>
       <div class='button-div with-padding' (click)='this.showRankingEvent.emit()'>
         Pular e ver ranking (sua pontuação será perdida)
       </div>
