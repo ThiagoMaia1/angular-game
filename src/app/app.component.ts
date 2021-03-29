@@ -20,7 +20,7 @@ import { Categories } from 'src/models/Score';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  gameIsActive = true;
+  gameIsActive = false;
   category = Categories[0];
 
   resetGame = () => {

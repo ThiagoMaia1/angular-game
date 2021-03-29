@@ -36,4 +36,9 @@ export default class Score {
         this.points = points;
         this.laps = laps;
     }
+
+    isEqualTo = (score : Score) => 
+        score.nickname === this.nickname &&
+        score.points === this.points &&
+        score.category === this.category; 
 }

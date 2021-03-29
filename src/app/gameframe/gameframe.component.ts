@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import Score, { Categories, Category } from 'src/models/Score';
+import Score, { Category } from 'src/models/Score';
 import GameObstacle from '../../models/GameObstacle';
 
 @Component({

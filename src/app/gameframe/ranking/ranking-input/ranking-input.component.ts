@@ -16,13 +16,16 @@ export class RankingInputComponent implements OnInit {
 
   @Input() score !: Score;
   @Output() showRankingEvent = new EventEmitter();
+  @Output() updateNicknameEvent = new EventEmitter<string>();
 
   keyup = (e : KeyboardEvent) => {
     e.stopPropagation();
     if (e.code !== 'Enter') return;
     let el = e.target as HTMLInputElement; 
     if(el.value) {
-      this.score.nickname = el.value;
+      let nick = el.value.trim();
+      this.score.nickname = nick;
+      this.updateNicknameEvent.emit(nick);
       createNewRecord(
         FirebaseCollections.scores,
         this.score,
