@@ -147,17 +147,12 @@ export class GameframeComponent implements OnInit {
     this.running = false;
     document.removeEventListener('keyup', this.shortCutListener);
     document.removeEventListener('click', this.clickListener);
-    document.addEventListener('keyup', this.reopenGame);
   };
   
   pause = () => {
     console.log('pausar', this.running);
     this.running = !this.running;
     if (this.running) this.onFrame();
-  }
-
-  reopenGame = (e : KeyboardEvent) => {
-    if (e.code === 'Space') this.gameActiveEvent.emit();
   }
 
   speedUp = () => this.fps += Math.sqrt(this.score)/10000;

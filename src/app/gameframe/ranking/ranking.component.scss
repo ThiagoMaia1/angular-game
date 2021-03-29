@@ -16,10 +16,19 @@
 .list-container {
     width: 70vw;
     height: 60vh;
+    overflow-y: auto;
+    table {
+        width: 100%;
+        th {
+            font-weight: initial;
+        }
+        tr {
+            text-align: center;
+        }
+    }
 }
 
 .ranking-line {
-    display: flex;
-    justify-content: space-between;
     margin: 1vh 0;
+    padding: 0 1vw;
 }

@@ -13,13 +13,13 @@ import Score, { Categories, Category } from 'src/models/Score';
       >
       </app-ranking-input>
       <app-ranking *ngIf='rankingIsVisible' [lastScore]='lastScore'></app-ranking>
-      <div (click)='reopen()' class='button-div'>Pressione "Espaço" ou clique para jogar novamente</div>
-      <div (click)='setCategory()' class='button-div'>
-        <div>
-          {{score.category === 'spinning' 
-            ? 'Muito difícil? Jogar sem girar.' 
-            : 'Muito fácil? Faça a tela para girar.'
-          }}
+      <div>Jogar novamente:</div>
+      <div class='choose-difficulty'>
+        <div (click)='setCategory(0)' class='button-div with-padding'>
+          Difícil (Girando)
+        </div>
+        <div (click)='setCategory(1)' class='button-div with-padding'>
+          Fácil (Parado)
         </div>
       </div>
     </div>
@@ -39,8 +39,10 @@ import Score, { Categories, Category } from 'src/models/Score';
       background-color: rgba(0,0,0,.75);
       padding: 0 5vw;
     }
-    .button-div {
-      padding: 3vh;
+    .choose-difficulty {
+      display: flex;
+      justify-content: space-evenly;
+      width: 100%;
     }
   `]
 })
@@ -53,15 +55,10 @@ export class RankingMenuComponent implements OnInit {
   rankingIsVisible = false;
   lastScore !: Score;
 
-  setCategory = () => {
-    let i = 0;
-    if (this.score.category === 'spinning') i = 1;
-    if (this.score.category === 'still') i = 0;
-    this.setCategoryEvent.emit(Categories[i]);
+  setCategory = (categoryIndex : number) => {
+    this.setCategoryEvent.emit(Categories[categoryIndex]);
   }
 
-  reopen = () => this.setCategoryEvent.emit(Categories.filter(c => c.name === this.score.category)[0]);
-  
   ngOnInit(): void {
     this.lastScore = this.score;
   }

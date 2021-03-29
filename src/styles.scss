@@ -18,8 +18,9 @@ input, button, textarea {
     font: inherit;
 }
 
+$grayHighlight: rgba(255, 255, 255, 0.5);
 @mixin gray-highlight {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: $grayHighlight;
 }
 
 .gray-highlight {
@@ -36,4 +37,33 @@ input, button, textarea {
 
 .button-div {
     @include button-div;
+    &.with-padding {
+        padding: 2vh;
+    }
+}
+
+@mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white,  50%)) {
+    // For Google Chrome
+    &::-webkit-scrollbar {
+      width:  $size;
+      height: $size;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: $foreground-color;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: $background-color;
+    }
+  
+    // For Internet Explorer
+    & {
+      scrollbar-face-color: $foreground-color;
+      scrollbar-track-color: $background-color;
+    }
+  }
+
+* {
+    @include scrollbars(10px, $grayHighlight, black);
 }
