@@ -25,16 +25,18 @@ import Score, { Categories } from 'src/models/Score';
             <th>#</th>
             <th>Nome</th>
             <th>Pontos</th>
-            <th *ngIf='category === "spinning"'>Voltas</th>
-            <th>Data</th>
+            <th *ngIf='!categoryIsStill()'>Voltas</th>
+            <th>Data/Hora</th>
+            <th *ngIf='categoryIsAll()'>Tipo</th>
           </tr>
           <tr *ngFor='let s of getFilteredScores(); let i = index' class='ranking-line' 
             [ngStyle]='getBackgroundColor(s, i)'>
             <td>{{i+1+posicaoInicial}}</td>
             <td>{{s.nickname}}</td>
             <td>{{s.points}}</td>
-            <td *ngIf='category === "spinning"'>{{s.laps}}</td>
+            <td *ngIf='!categoryIsStill()'>{{s.laps}}</td>
             <td>{{s.strDate}}</td>
+            <td *ngIf='categoryIsAll()'>{{getCategoryLabel(s.category)}}</td>
           </tr>
         </table>
         <!-- <div *ngFor='let p of pageButtons' class='button-div with-padding' 
@@ -71,6 +73,10 @@ export class RankingComponent implements OnInit {
       return {backgroundColor: "rgba(255, 255, 255, 0.2)"};
     return {};
   }
+  categoryIsStill = () => this.category === "still";
+  categoryIsAll = () => this.category === 'all';
+  getCategoryLabel = (categoryName : string) => 
+    Categories.filter(c => c.name === categoryName)[0].label
 
   ngOnInit() {
     this.category = this.lastScore.category;
