@@ -14,7 +14,7 @@ export class Category {
 }
 
 export const Categories = [
-    new Category('spinning', 'Rodando'),
+    new Category('spinning', 'Girando'),
     new Category('still', 'Parado'),
     new Category('all', 'Geral'),
 ]

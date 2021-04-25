@@ -15,11 +15,11 @@ import Score, { Categories, Category } from 'src/models/Score';
       <app-ranking *ngIf='rankingIsVisible' [lastScore]='lastScore'></app-ranking>
       <div>Jogar novamente:</div>
       <div class='choose-difficulty'>
-        <div (click)='setCategory(0)' class='button-div with-padding'>
-          Difícil (Girando)
-        </div>
         <div (click)='setCategory(1)' class='button-div with-padding'>
           Fácil (Parado)
+        </div>
+        <div (click)='setCategory(0)' class='button-div with-padding'>
+          Difícil (Girando)
         </div>
       </div>
     </div>
