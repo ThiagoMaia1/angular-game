@@ -6,7 +6,7 @@ import Score from 'src/models/Score';
   template: `
     <div class='score'>
       <div>Pontuação: {{score.points}}</div>
-      <div *ngIf='score.laps > 0' style='margin: "2vh";'>Voltas: {{score.laps}}</div>
+      <div *ngIf='true || score.laps > 0' style='margin: "2vh";'>Voltas: {{score.laps}}</div>
     </div>
   `
 })

@@ -7,8 +7,8 @@ import GameObstacle from '../../models/GameObstacle';
   template: `
     <div class='game-frame-container'>
       <app-ranking-menu *ngIf='dead' (setCategoryEvent)='setCategory($event)' [score]='getScoreObject()'></app-ranking-menu>
-      <app-score *ngIf='!dead' [score]='getScoreObject()'></app-score>
-      <div (click)='pause()' class='pause-button' [ngStyle]='dead ? {visibility: "hidden"} : {}' name='Atalho: P'>
+      <app-score style="position: fixed" *ngIf='!dead' [score]='getScoreObject()'></app-score>
+      <div (click)='clickPause($event)' class='pause-button' [ngStyle]='dead ? {visibility: "hidden"} : {}' name='Atalho: P'>
           {{(running ? 'P' : 'Desp') + 'ausar'}}
       </div>
       <div class='floor' [style.transform]="'rotate(' + getAngle() + 'deg)'">
@@ -150,9 +150,13 @@ export class GameframeComponent implements OnInit {
   };
   
   pause = () => {
-    console.log('pausar', this.running);
     this.running = !this.running;
     if (this.running) this.onFrame();
+  }
+
+  clickPause = (event : Event) => {
+    event.stopPropagation();
+    this.pause();
   }
 
   speedUp = () => this.fps += Math.sqrt(this.score)/10000;
